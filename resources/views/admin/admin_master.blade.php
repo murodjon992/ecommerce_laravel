@@ -312,7 +312,21 @@
 	<script src="{{asset('../assets/vendor_components/easypiechart/dist/jquery.easypiechart.js')}}"></script>
 	<script src="{{asset('../assets/vendor_components/apexcharts-bundle/irregular-data-series.js')}}"></script>
 	<script src="{{asset('../assets/vendor_components/apexcharts-bundle/dist/apexcharts.js')}}"></script>
-	
+	{{-- datatables --}}
+	<script src="{{asset('../assets/vendor_components/datatable/datatables.min.js')}}"></script>
+	<script src="{{asset('backend/js/pages/data-table.js')}}"></script>
+	{{-- sweet alert --}}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.16/sweetalert2.all.min.js"
+	integrity="sha512-4tvE14sHIcdIHl/dUdMHp733PI6MpYA7BDnDfndQmx7aIovEkW+LfkonVO9+NPWP1jYzmrqXJMIT2tECv1TsEQ=="
+	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	{{-- form editor --}}
+	<script src="{{asset('../assets/vendor_components/ckeditor/ckeditor.js')}}"></script>
+	<script src="{{asset('backend/js/pages/editor.js')}}"></script>
+	{{-- form validation --}}
+	<script src="{{asset('backend/js/pages/validation.js')}}"></script>
+    <script src="{{asset('backend/js/pages/form-validation.js')}}"></script>
+	{{-- tags input --}}
+	<script src="../assets/vendor_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
 	<!-- Sunny Admin App -->
 	<script src="{{asset('backend/js/template.js')}}"></script>
 	<script src="{{asset('backend/js/pages/dashboard.js')}}"></script>
@@ -337,6 +351,31 @@
                     break;
             }
         @endif
+    </script>
+	  <script type="text/javascript">
+        $(document).on('click', '#delete', function(e) {
+            e.preventDefault();
+            var link = $(this).attr('href');
+
+            Swal.fire({
+                title: 'Ushbu ma`lumotni o`chirmoqchimisiz?',
+                text: 'Ma`lumotni o`chirish uchun',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ha'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = link;
+                    Swal.fire(
+                        'deleted',
+                        'your file has been deleted',
+                        'success'
+                    )
+                }
+            })
+        })
     </script>
 </body>
 </html>
