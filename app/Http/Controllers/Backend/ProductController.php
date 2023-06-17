@@ -128,4 +128,73 @@ class ProductController extends Controller
         return redirect()->route('manage-product')->with($notification);
 
     }
+
+    public function MultiImageUpdate(Request $request){
+        $imgs = $request->multi_img;
+
+        foreach($imgs as $id => $img){
+            $imfDel = MultiImg::findOrFail($id);
+           unlink($imfDel->photo_name);
+            
+            $name_gen = hexdec(uniqid()).'.'.$img->getClientOriginalExtension();
+            Image::make($img)->resize(917,1000)->save('upload/products/multi-img/'.$name_gen);
+            $uploadPath = 'upload/products/multi-img/'. $name_gen;
+            
+            MultiImg::where('id',$id)->update([
+                'photo_name'=> $uploadPath,
+                'updated_at' => Carbon::now(),
+
+            ]);
+        }
+        $notification = array(
+            'message' => 'Mahsulot rasmi yangilandi',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('manage-product')->with($notification);
+
+    }
+
+    public function MultiImageDelete($id){
+        $oldimg = MultiImg::findOrFail($id);
+        unlink($oldimg->photo_name);
+        MultiImg::findOrFail($id)->delete();
+
+        $notification = array(
+            'message'=> 'Mahsulot rasmi o`chirildi',
+            'alert-type'=> 'success',
+        );
+        return redirect()->back()->with($notification);
+         
+    }
+    public function ProductInactive($id){
+        Product::findOrFail($id)->update(['status' => 0]);
+        $notification = array(
+            'message'=> 'Mahsulot tugadi',
+            'alert-type'=> 'success',
+        );
+        return redirect()->back()->with($notification);
+    }
+    public function ProductActive($id){
+        Product::findOrFail($id)->update(['status' => 1]);
+        $notification = array(
+            'message'=> 'Mahsulot mavjud',
+            'alert-type'=> 'success',
+        );
+        return redirect()->back()->with($notification);
+    }
+    public function ProductDelete($id){
+        $product = Product::findOrFail($id);
+        unlink($product->product_thambnail);
+        Product::findOrFail($id)->delete();
+        $images = MultiImg::where('product_id',$id)->get();
+        foreach($images as $img){
+            unlink($img->photo_name);
+            MultiImg::where('product_id',$id)->delete();
+        }
+        $notification = array(
+            'message'=> 'Mahsulot o`chirildi',
+            'alert-type'=> 'success',
+        );
+        return redirect()->back()->with($notification);
+    } 
 }

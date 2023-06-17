@@ -349,18 +349,20 @@
                     </div>
                     <div class="box-body">
                     <form action="{{route('update-product-image')}}" method="post" enctype="multipart/form-data">
+                        @csrf
                         <div class="row row-sm">
                             @foreach ($multiImgs as $img)
                                 
                             <div class="col-md-3">
                                 <div class="card">
-                                    <img src="{{asset($img->photo_name)}}" alt="" class="card-img-top">
+                                    <img src="{{asset($img->photo_name)}}" alt="" class="card-img-top img-responsive">
                                     <div class="card-body">
-                                        <h5 class="card-title"><a href="" class="btn btn-danger" id="delete" title="Delete data"><i class="fa fa-trash"></i></a></h5>
+                                        <h5 class="card-title"><a href="{{ route('product.multiimg.delete', $img->id)}}" class="btn btn-danger" id="delete" title="Delete data"><i class="fa fa-trash"></i></a></h5>
                                         <p class="card-text">
 
                                             <p class="text-light">Rasm Almashtirish</p>
-                                            <input class="form-control" name="multi_img[$img->id]" type="file"/>
+                                            <input class="form-control" name="multi_img[{{$img->id}}]"  onChange="mainThamUrlPastki(this)" type="file"/>
+                                            <img id="mainThm" src="" alt="">
                                         </p>
                                     </div>
                                 </div>
@@ -374,6 +376,44 @@
             </div>
         </div>
     </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="box bt-3 border-info">
+                    <div class="box-header">
+                        <h4 class="box-title">Mahsulot rasmlarini <strong> yangilash</strong></h4>
+                    </div>
+                    <div class="box-body">
+                    <form action="{{route('update-product-image')}}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row row-sm">
+                            @foreach ($multiImgs as $img)
+                                
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <img src="{{asset($img->photo_name)}}" alt="" class="card-img-top img-responsive">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="" class="btn btn-danger" id="delete" title="Delete data"><i class="fa fa-trash"></i></a></h5>
+                                        <p class="card-text">
+
+                                            <p class="text-light">Rasm Almashtirish</p>
+                                            <input class="form-control" name="multi_img[{{$img->id}}]"  onChange="mainThamUrlPastki(this)" type="file"/>
+                                            <img id="mainThm" src="" alt="">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        <button class="btn btn-rounded btn-primary" type="submit">Rasm yangilash</button>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     </div>
   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -425,6 +465,15 @@
                 var reader = new FileReader();
                 reader.onload = function(e){
                     $('#mainThmb').attr('src', e.target.result).width(80).height(80)
+                };
+                reader.readAsDataURL(input.files[0])
+            }
+        }
+        function mainThamUrlPastki(input){
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    $('#mainThm').attr('src', e.target.result).width(80).height(80)
                 };
                 reader.readAsDataURL(input.files[0])
             }

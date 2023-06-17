@@ -26,9 +26,11 @@
                     <thead>
                         <tr>
                             <th>IMAGE</th>
-                            <th>Product name enX</th>
-                            <th>Product name UZ</th>
+                            <th>Product name En</th>
+                            <th>Product Price</th>
                             <th>Quantity</th>
+                            <th>Discount</th>
+                            <th>Status</th>
                             <th>action</th>
                         </tr>
                     </thead>
@@ -38,11 +40,38 @@
                         <tr>
                             <td><img width="100" height="60"src="{{asset($item->product_thambnail)}}" alt=""></td>
                             <td>{{$item->product_name_en}}</td>
-                            <td>{{$item->product_name_uz}}</td>
+                            <td>{{$item->selling_price}}</td>
                             <td>{{$item->product_qty}}</td>
                             <td>
+                                @if($item->discount_price == NULL)
+                                <span class="badge badge-pill badge-danger">Chegirma yo'q</span>
+                                @else
+                                @php
+                                 $amount = $item->selling_price - $item->discount_price;
+                                 $discount = ($amount/$item->selling_price) * 100;   
+                                @endphp
+                                <span class="badge badge-pill badge-success">{{round($discount) }} %</span>
+
+                                @endif
+                            
+                            
+                            </td>
+                            <td>
+                                @if($item->status == 1)
+                                <span class="badge badge-pill badge-success">Mavjud</span>
+                                @else
+                                <span class="badge badge-pill badge-danger">tugadi</span>
+                                @endif
+                            </td>
+                            <td width="20%">
+                                <a href="{{route('edit-product', $item->id)}}" title="tahrirlash" class="btn btn-info"><i class="fa fa-eye"></i></a>
                                 <a href="{{route('edit-product', $item->id)}}" title="tahrirlash" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                                <a href="{{route('category.delete', $item->id)}}" title="o'chirish" id="delete" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                <a href="{{route('product.delete', $item->id)}}" title="o'chirish" id="delete" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                @if($item->status == 1)
+                                <a href="{{route('product.inactive', $item->id)}}" title="o'chirish" class="btn btn-danger"><i class="fa fa-arrow-down"></i></a>
+                                @else
+                                <a href="{{route('product.active', $item->id)}}" title="o'chirish" class="btn btn-success"><i class="fa fa-arrow-up"></i></a>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
